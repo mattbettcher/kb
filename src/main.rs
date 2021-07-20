@@ -19,16 +19,16 @@ fn expression_test() {
 
 fn main() {
     let expr = kb::ExprParser::new()
-        .parse("22 * 44 + 66 / 2")
+        .parse("22 * 44 + 66 / 2 + 1 - 3")
         .unwrap();
 
-    let mut graph = Graph::<String, ()>::new(); // directed and unlabeled
+    let mut graph = Graph::<String, u32>::new(); // directed and unlabeled
     print_expr_graph(&mut graph, &expr, 0);
 
-    println!("{:?}", Dot::with_config(&graph, &[Config::EdgeNoLabel]));
+    println!("{:}", Dot::with_config(&graph, &[Config::EdgeNoLabel]));
 }
 
-fn print_expr_graph(graph: &mut Graph::<String, ()>, e: &Expr, indent: usize) -> NodeIndex {
+fn print_expr_graph(graph: &mut Graph::<String, u32>, e: &Expr, indent: usize) -> NodeIndex {
     match e {
         Expr::Number(n) => graph.add_node(n.to_string()),
         Expr::Op(a, op, b) => { 
@@ -40,8 +40,8 @@ fn print_expr_graph(graph: &mut Graph::<String, ()>, e: &Expr, indent: usize) ->
                 Sub => graph.add_node("-".to_string()),
             };
             let node_b = print_expr_graph(graph, b, indent + 1);
-            graph.add_edge(node, node_a, ());
-            graph.add_edge(node, node_b, ());
+            graph.add_edge(node, node_a, 0);
+            graph.add_edge(node, node_b, 0);
             node
         },
         Expr::Error => todo!(),
