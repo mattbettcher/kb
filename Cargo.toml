@@ -8,6 +8,7 @@ build = "build.rs" # LALRPOP preprocessing
 [dependencies]
 lalrpop-util = "0.19.6"
 regex = "1"
+petgraph = "0.6.0"
 
 [build-dependencies]
 lalrpop = "0.19.6"
