@@ -1,7 +1,15 @@
 use std::str::FromStr;
-use crate::ast::{Expr, Opcode};
+use crate::ast::{Expr, Opcode, Statement};
 
 grammar;
+
+pub Func: Box<Statement> = {
+    "fn" <name:Ident> "(" ")" <code:Block> => Box::new(Statement::Function(name, code)),
+};
+
+Statement: Box<Statement> = {
+    Expr => Box::new(Statement::Expr(*<>)),
+};
 
 pub Expr: Box<Expr> = { // (1)
     Expr ExprOp Factor => Box::new(Expr::Op(<>)), // (2)
@@ -28,13 +36,33 @@ Term: Box<Expr> = {
     "(" <Expr> ")"
 };
 
-Comma: () = {
-    ",",
+Block: Vec<Box<Statement>> = {
+ "{" <Semicolon<Statement>> "}" => <>,
 };
 
-//Ident: String = {
-//    r"[a-zA-Z][a-zA-Z0-9]*" => <>.to_string(),
-//};
+Comma<T>: Vec<T> = { // (1)
+    <mut v:(<T> ",")*> <e:T?> => match e { // (2)
+        None => v,
+        Some(e) => {
+            v.push(e);
+            v
+        }
+    }
+};
+
+Semicolon<T>: Vec<T> = { // (1)
+    <mut v:(<T> ";")*> <e:T?> => match e { // (2)
+        None => v,
+        Some(e) => {
+            v.push(e);
+            v
+        }
+    }
+};
+
+Ident: String = {
+    r"[a-zA-Z][a-zA-Z0-9]*" => <>.to_string(),
+};
 
 Num: i32 = {
     r"[0-9]+" => i32::from_str(<>).unwrap()

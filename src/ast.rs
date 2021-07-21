@@ -1,6 +1,12 @@
 
 use std::fmt::{Debug, Error, Formatter};
 
+#[derive(Clone, Debug)]
+pub enum Statement {
+    Function(String, Vec<Box<Statement>>),
+    Expr(Expr),
+}
+
 #[derive(Clone)]
 pub enum Expr {
     Number(i32),
