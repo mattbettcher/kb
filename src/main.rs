@@ -2,12 +2,14 @@
 extern crate lalrpop_util;
 
 mod ast;
+mod expr_visitor;
 lalrpop_mod!(pub kb);
 
 use petgraph::dot::{Config, Dot};
 use petgraph::graph::{Graph, NodeIndex};
 use ast::*;
 use ast::Opcode::*;
+use expr_visitor::*;
 
 #[test]
 fn expression_test() {
@@ -19,13 +21,16 @@ fn expression_test() {
 
 fn main() {
     let expr = kb::ExprParser::new()
-        .parse("22 * 44 + 66 / 2 + 1 - 3")
+        .parse("22 * 44 + 66 / 2")
         .unwrap();
 
     let mut graph = Graph::<String, u32>::new(); // directed and unlabeled
     print_expr_graph(&mut graph, &expr, 0);
 
     println!("{:}", Dot::with_config(&graph, &[Config::EdgeNoLabel]));
+
+    // test expression evaluator
+    println!("{:}", visit_expr(&*expr));
 }
 
 fn print_expr_graph(graph: &mut Graph::<String, u32>, e: &Expr, indent: usize) -> NodeIndex {
