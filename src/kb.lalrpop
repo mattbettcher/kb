@@ -3,12 +3,12 @@ use crate::ast::{Expr, Opcode, Statement};
 
 grammar;
 
-pub Func: Box<Statement> = {
-    "fn" <name:Ident> "(" ")" <code:Block> => Box::new(Statement::Function(name, code)),
+pub Func: Statement = {
+    "fn" <name:Ident> "(" ")" <code:Block> => Statement::Function(name, code),
 };
 
-Statement: Box<Statement> = {
-    Expr => Box::new(Statement::Expr(*<>)),
+Statement: Statement = {
+    Expr => Statement::Expr(*<>),
 };
 
 pub Expr: Box<Expr> = { // (1)
@@ -36,7 +36,7 @@ Term: Box<Expr> = {
     "(" <Expr> ")"
 };
 
-Block: Vec<Box<Statement>> = {
+Block: Vec<Statement> = {
  "{" <Semicolon<Statement>> "}" => <>,
 };
 

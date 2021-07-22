@@ -3,6 +3,7 @@ extern crate lalrpop_util;
 
 mod ast;
 mod expr_visitor;
+mod codegen;
 lalrpop_mod!(pub kb);
 
 use petgraph::dot::{Config, Dot};
@@ -21,7 +22,7 @@ fn expression_test() {
 
 fn main() {
     let func = kb::FuncParser::new()
-        .parse("fn main() { 2 + 2; }")
+        .parse("fn main() { 2 + 2; 4 - 4; }")
         .unwrap();
 
         println!("{:?}", func);

@@ -3,7 +3,7 @@ use std::fmt::{Debug, Error, Formatter};
 
 #[derive(Clone, Debug)]
 pub enum Statement {
-    Function(String, Vec<Box<Statement>>),
+    Function(String, Vec<Statement>),
     Expr(Expr),
 }
 
