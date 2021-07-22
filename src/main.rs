@@ -1,3 +1,6 @@
+#![allow(dead_code)]
+#![allow(unused_imports)]
+
 #[macro_use]
 extern crate lalrpop_util;
 
@@ -24,7 +27,7 @@ fn expression_test() {
 
 fn main() {
     let func = kb::FuncParser::new()
-        .parse("fn main() { 2 + 2; }")
+        .parse("fn main() { 8 + 8 - 2; }")
         .unwrap();
 
         println!("{:?}", func);

@@ -21,7 +21,7 @@ pub fn func_gen(func_stmt: &Statement, code: &mut Code) {
             code.text.push_str(format!("{:}:\n", name).as_str()); // label for function
             for stmt in stmts {
                 match stmt {
-                    Function(_, _) => println!("Cant't define a function inside a function!"),
+                    Function(_, _) => println!("Can't define a function inside a function!"),
                     Expr(expr) => {
                         expr_gen(&expr, code);
                     }
@@ -30,7 +30,9 @@ pub fn func_gen(func_stmt: &Statement, code: &mut Code) {
         },
         Expr(_) => println!("Cannot have free standing expressions."),
     }
-    code.text.push_str("\tret\n");
+    code.cur_reg = 0;
+    code.text.push_str("\tPUSH EAX\n");
+    code.text.push_str("\tHLT\n");          // TEMP
 }
 
 fn expr_gen(e: &Expr, code: &mut Code) {
@@ -38,19 +40,20 @@ fn expr_gen(e: &Expr, code: &mut Code) {
     use crate::ast::Opcode::*;
     match e {
         Number(n) => { 
-            code.text.push_str(format!("\tmov {:}, {:}\n", n, reg(code.cur_reg)).as_str());
-            code.cur_reg += 1;
+            code.text.push_str(format!("\tMOV {:}, {:}\n", reg(code.cur_reg), n).as_str());
         },
         Op(l, op, r) => {
             expr_gen(&*l, code);
+            code.cur_reg = 1;
             expr_gen(&*r, code);
             match op {
-                Mul => { code.text.push_str(format!("\tmul rbx, rax\n").as_str()); },
-                Div => { code.text.push_str(format!("\tdiv rbx, rax\n").as_str()); },
-                Add => { code.text.push_str(format!("\tadd rbx, rax\n").as_str()); },
-                Sub => { code.text.push_str(format!("\tsub rbx, rax\n").as_str()); },
+                Mul => { code.text.push_str(format!("\tMUL EAX, {:}\n", reg(code.cur_reg)).as_str()); },
+                Div => { code.text.push_str(format!("\tDIV EAX, {:}\n", reg(code.cur_reg)).as_str()); },
+                Add => { code.text.push_str(format!("\tADD EAX, {:}\n", reg(code.cur_reg)).as_str()); },
+                Sub => { code.text.push_str(format!("\tSUB EAX, {:}\n", reg(code.cur_reg)).as_str()); },
             };
-            code.cur_reg = 0;
+            //code.text.push_str("\tPUSH EAX\n");
+            //code.cur_reg = 1;
         },
         Error => todo!(),
     }
@@ -58,9 +61,10 @@ fn expr_gen(e: &Expr, code: &mut Code) {
 
 fn reg(index: usize) -> &'static str {
     match index {
-        0 => "rax",
-        1 => "rbx",
-        2 => "rcx",
+        0 => "EAX",
+        1 => "EBX",
+        2 => "ECX",
+        3 => "EDX",
         _ => panic!(),
     }
 }
