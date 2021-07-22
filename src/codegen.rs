@@ -47,13 +47,12 @@ fn expr_gen(e: &Expr, code: &mut Code) {
             code.cur_reg = 1;
             expr_gen(&*r, code);
             match op {
+                // mul and div are wrong?
                 Mul => { code.text.push_str(format!("\tMUL EAX, {:}\n", reg(code.cur_reg)).as_str()); },
                 Div => { code.text.push_str(format!("\tDIV EAX, {:}\n", reg(code.cur_reg)).as_str()); },
                 Add => { code.text.push_str(format!("\tADD EAX, {:}\n", reg(code.cur_reg)).as_str()); },
                 Sub => { code.text.push_str(format!("\tSUB EAX, {:}\n", reg(code.cur_reg)).as_str()); },
             };
-            //code.text.push_str("\tPUSH EAX\n");
-            //code.cur_reg = 1;
         },
         Error => todo!(),
     }

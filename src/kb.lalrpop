@@ -3,6 +3,10 @@ use crate::ast::{Expr, Opcode, Statement};
 
 grammar;
 
+pub Top: Vec<Statement> = {
+    Func+
+};
+
 pub Func: Statement = {
     "fn" <name:Ident> "(" ")" <code:Block> => Statement::Function(name, code),
 };

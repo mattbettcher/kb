@@ -26,18 +26,20 @@ fn expression_test() {
 }
 
 fn main() {
-    let func = kb::FuncParser::new()
-        .parse("fn main() { 8 + 8 - 2; }")
+    let funcs = kb::TopParser::new()
+        .parse("fn main() { 8 + 8 - 2; } fn test() { 3 + 4; }")
         .unwrap();
 
-        println!("{:?}", func);
+        println!("{:?}", funcs);
 
         let mut code = Code { 
             text: String::new(),
             cur_reg: 0,
          };
 
-        func_gen(&func, &mut code);
+        for func in funcs {
+            func_gen(&func, &mut code);
+        }
 
         println!("{:}", code.text);
 
