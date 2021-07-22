@@ -11,6 +11,7 @@ pub enum Statement {
 pub enum Expr {
     Number(i32),
     Op(Box<Expr>, Opcode, Box<Expr>),
+    Call(String),       // todo: arguments & return
     Error,
 }
 
@@ -28,6 +29,7 @@ impl Debug for Expr {
         match &self {
             Number(n) => write!(fmt, "{:?}", n),
             Op(ref l, op, ref r) => write!(fmt, "({:?} {:?} {:?})", l, op, r),
+            Call(name) => write!(fmt, "{:}", name),
             Error => write!(fmt, "error"),
         }
     }

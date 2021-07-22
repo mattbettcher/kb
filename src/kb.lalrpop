@@ -4,10 +4,10 @@ use crate::ast::{Expr, Opcode, Statement};
 grammar;
 
 pub Top: Vec<Statement> = {
-    Func+
+    FuncDef+
 };
 
-pub Func: Statement = {
+pub FuncDef: Statement = {
     "fn" <name:Ident> "(" ")" <code:Block> => Statement::Function(name, code),
 };
 
@@ -17,12 +17,17 @@ Statement: Statement = {
 
 pub Expr: Box<Expr> = { // (1)
     Expr ExprOp Factor => Box::new(Expr::Op(<>)), // (2)
+    FuncCall,
     Factor,
 };
 
 ExprOp: Opcode = { // (3)
     "+" => Opcode::Add,
     "-" => Opcode::Sub,
+};
+
+FuncCall: Box<Expr> = {
+    <Ident> "(" ")" => Box::new(Expr::Call(<>)),
 };
 
 Factor: Box<Expr> = {

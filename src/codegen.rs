@@ -54,6 +54,9 @@ fn expr_gen(e: &Expr, code: &mut Code) {
                 Sub => { code.text.push_str(format!("\tSUB EAX, {:}\n", reg(code.cur_reg)).as_str()); },
             };
         },
+        Call(name) => {
+            code.text.push_str(format!("\tCALL {:}\n", name).as_str());
+        },
         Error => todo!(),
     }
 }

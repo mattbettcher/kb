@@ -5,7 +5,7 @@
 extern crate lalrpop_util;
 
 mod ast;
-mod expr_visitor;
+//mod expr_visitor;
 mod codegen;
 lalrpop_mod!(pub kb);
 
@@ -13,7 +13,7 @@ use petgraph::dot::{Config, Dot};
 use petgraph::graph::{Graph, NodeIndex};
 use ast::*;
 use ast::Opcode::*;
-use expr_visitor::*;
+//use expr_visitor::*;
 
 use crate::codegen::{Code, func_gen};
 
@@ -27,7 +27,7 @@ fn expression_test() {
 
 fn main() {
     let funcs = kb::TopParser::new()
-        .parse("fn main() { 8 + 8 - 2; } fn test() { 3 + 4; }")
+        .parse("fn main() { 8 + 8 - 2; test(); } fn test() { 3 + 4; }")
         .unwrap();
 
         println!("{:?}", funcs);
@@ -52,7 +52,7 @@ fn main() {
     //println!("{:}", visit_expr(&*expr));
 }
 
-fn print_expr_graph(graph: &mut Graph::<String, u32>, e: &Expr, indent: usize) -> NodeIndex {
+/*fn print_expr_graph(graph: &mut Graph::<String, u32>, e: &Expr, indent: usize) -> NodeIndex {
     match e {
         Expr::Number(n) => graph.add_node(n.to_string()),
         Expr::Op(a, op, b) => { 
@@ -71,3 +71,4 @@ fn print_expr_graph(graph: &mut Graph::<String, u32>, e: &Expr, indent: usize) -
         Expr::Error => todo!(),
     }
 }
+*/
