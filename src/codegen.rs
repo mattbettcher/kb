@@ -17,11 +17,11 @@ pub fn func_gen(func_stmt: &Statement, code: &mut Code) {
     use crate::ast::Statement::*;
     
     match func_stmt {
-        Function(name, stmts, _) => {
+        Function(name, _, stmts, _) => {
             code.text.push_str(format!("{:}:\n", name).as_str()); // label for function
             for stmt in stmts {
                 match stmt {
-                    Function(_, _, _) => println!("Can't define a function inside a function!"),
+                    Function(_, _, _, _) => println!("Can't define a function inside a function!"),
                     Expr(expr) => {
                         expr_gen(&expr, code);
                     }
