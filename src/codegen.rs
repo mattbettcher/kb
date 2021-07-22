@@ -17,7 +17,7 @@ pub fn func_gen(func_stmt: &Statement, code: &mut Code) {
     use crate::ast::Statement::*;
     
     match func_stmt {
-        Function(name, _, stmts, _) => {
+        Function(name, _, _, stmts) => {
             code.text.push_str(format!("{:}:\n", name).as_str()); // label for function
             for stmt in stmts {
                 match stmt {

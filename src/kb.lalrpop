@@ -8,7 +8,7 @@ pub Top: Vec<Statement> = {
 };
 
 pub FuncDef: Statement = {
-    "fn" <name:Ident> "(" <params:Comma<ParamDef>> ")" <ret:Ret?> <code:Block> => Statement::Function(name, params, code, ret),
+    "fn" <name:Ident> "(" <params:Comma<ParamDef>> ")" <ret:Ret?> <code:Block> => Statement::Function(name, params, ret, code),
 };
 
 Statement: Statement = {

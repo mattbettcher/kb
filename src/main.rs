@@ -41,7 +41,7 @@ fn main() {
             func_gen(&func, &mut code);
         }
 
-        println!("{:}", code.text);
+        //println!("{:}", code.text);
 
     //let mut graph = Graph::<String, u32>::new(); // directed and unlabeled
     //print_expr_graph(&mut graph, &expr, 0);
