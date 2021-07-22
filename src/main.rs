@@ -12,6 +12,8 @@ use ast::*;
 use ast::Opcode::*;
 use expr_visitor::*;
 
+use crate::codegen::{Code, func_gen};
+
 #[test]
 fn expression_test() {
     let expr = kb::ExprParser::new()
@@ -22,10 +24,19 @@ fn expression_test() {
 
 fn main() {
     let func = kb::FuncParser::new()
-        .parse("fn main() { 2 + 2; 4 - 4; }")
+        .parse("fn main() { 2 + 2; }")
         .unwrap();
 
         println!("{:?}", func);
+
+        let mut code = Code { 
+            text: String::new(),
+            cur_reg: 0,
+         };
+
+        func_gen(&func, &mut code);
+
+        println!("{:}", code.text);
 
     //let mut graph = Graph::<String, u32>::new(); // directed and unlabeled
     //print_expr_graph(&mut graph, &expr, 0);
