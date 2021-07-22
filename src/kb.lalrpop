@@ -8,7 +8,7 @@ pub Top: Vec<Statement> = {
 };
 
 pub FuncDef: Statement = {
-    "fn" <name:Ident> "(" ")" <code:Block> => Statement::Function(name, code),
+    "fn" <name:Ident> "(" ")" <ret:Ret?> <code:Block> => Statement::Function(name, code, ret),
 };
 
 Statement: Statement = {
@@ -27,7 +27,11 @@ ExprOp: Opcode = { // (3)
 };
 
 FuncCall: Box<Expr> = {
-    <Ident> "(" ")" => Box::new(Expr::Call(<>)),
+    <name:Ident> "(" ")" => Box::new(Expr::Call(name)),
+};
+
+Ret: Vec<String> = {
+    "->" <Ident+> => <>,
 };
 
 Factor: Box<Expr> = {

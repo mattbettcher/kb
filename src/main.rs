@@ -27,7 +27,7 @@ fn expression_test() {
 
 fn main() {
     let funcs = kb::TopParser::new()
-        .parse("fn main() { 8 + 8 - 2; test(); } fn test() { 3 + 4; }")
+        .parse("fn main() { 8 + 8 - 2; test(); } fn test() -> i32 { 3 + 4; }")
         .unwrap();
 
         println!("{:?}", funcs);
