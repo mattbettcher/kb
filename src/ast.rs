@@ -4,6 +4,7 @@ use std::fmt::{Debug, Error, Formatter};
 #[derive(Clone, Debug)]
 pub enum Statement {
     Function(String, Vec<(String, String)>, Option<Vec<String>>, Vec<Statement>),
+    If(Expr, Vec<Statement>),
     Expr(Expr),
 }
 
@@ -21,6 +22,8 @@ pub enum Opcode {
     Div,
     Add,
     Sub,
+    Equ,
+    Neq,
 }
 
 impl Debug for Expr {
@@ -43,6 +46,8 @@ impl Debug for Opcode {
             Div => write!(fmt, "/"),
             Add => write!(fmt, "+"),
             Sub => write!(fmt, "-"),
+            Equ => write!(fmt, "=="),
+            Neq => write!(fmt, "!="),
         }
     }
 }

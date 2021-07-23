@@ -7,18 +7,30 @@ pub Top: Vec<Statement> = {
     FuncDef+
 };
 
-pub FuncDef: Statement = {
-    "fn" <name:Ident> "(" <params:Comma<ParamDef>> ")" <ret:Ret?> <code:Block> => Statement::Function(name, params, ret, code),
+Statement: Statement = {
+    "if" <e:Expr> <b:Block> => Statement::If(*e, b),
+    Expr => Statement::Expr(*<>),
 };
 
-Statement: Statement = {
-    Expr => Statement::Expr(*<>),
+FuncDef: Statement = {
+    "fn" <name:Ident> "(" <params:Comma<ParamDef>> ")" <ret:Ret?> <code:Block> => Statement::Function(name, params, ret, code),
 };
 
 pub Expr: Box<Expr> = { // (1)
     Expr ExprOp Factor => Box::new(Expr::Op(<>)), // (2)
     FuncCall,
+    Equality,
+};
+
+Equality: Box<Expr> = {
+    Equality EqualityOp Term => Box::new(Expr::Op(<>)),
     Factor,
+};
+
+
+EqualityOp: Opcode = {
+    "==" => Opcode::Equ,
+    "!=" => Opcode::Neq,
 };
 
 ExprOp: Opcode = { // (3)

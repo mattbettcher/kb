@@ -27,7 +27,12 @@ fn expression_test() {
 
 fn main() {
     let funcs = kb::TopParser::new()
-        .parse("fn main(args: u32, argv: char) { 8 + 8 - 2; test(); } fn test() -> i32 { 3 + 4; }")
+        .parse("
+        fn equ(num: u32) {
+            if 1 == 0 {
+                0;
+            }
+        }")
         .unwrap();
 
         println!("{:?}", funcs);
@@ -41,7 +46,7 @@ fn main() {
             func_gen(&func, &mut code);
         }
 
-        //println!("{:}", code.text);
+        println!("{:}", code.text);
 
     //let mut graph = Graph::<String, u32>::new(); // directed and unlabeled
     //print_expr_graph(&mut graph, &expr, 0);
