@@ -23,7 +23,7 @@ pub Expr: Box<Expr> = { // (1)
 };
 
 Equality: Box<Expr> = {
-    Equality EqualityOp Term => Box::new(Expr::Op(<>)),
+    Equality EqualityOp Factor => Box::new(Expr::Op(<>)),
     Factor,
 };
 

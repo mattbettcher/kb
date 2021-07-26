@@ -9,6 +9,7 @@ mod ast;
 mod codegen;
 lalrpop_mod!(pub kb);
 
+use std::fs;
 use petgraph::dot::{Config, Dot};
 use petgraph::graph::{Graph, NodeIndex};
 use ast::*;
@@ -28,7 +29,7 @@ fn expression_test() {
 fn main() {
     let funcs = kb::TopParser::new()
         .parse("
-        fn equ(num: u32) {
+        fn mymain() {
             if 1 == 0 {
                 0;
             }
@@ -38,15 +39,18 @@ fn main() {
         println!("{:?}", funcs);
 
         let mut code = Code { 
-            text: String::new(),
+            text: String::from("bits 64\ndefault rel\nsection .text\n\n"),
             cur_reg: 0,
+            cur_label: 0,
          };
 
         for func in funcs {
             func_gen(&func, &mut code);
         }
 
-        println!("{:}", code.text);
+        //println!("{:}", code.text);
+
+        fs::write("mymain.asm", code.text).expect("Unable to write file");
 
     //let mut graph = Graph::<String, u32>::new(); // directed and unlabeled
     //print_expr_graph(&mut graph, &expr, 0);
