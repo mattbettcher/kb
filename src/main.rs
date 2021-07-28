@@ -10,6 +10,7 @@ mod codegen;
 lalrpop_mod!(pub kb);
 
 use std::fs;
+use std::str;
 use petgraph::dot::{Config, Dot};
 use petgraph::graph::{Graph, NodeIndex};
 use ast::*;
@@ -27,13 +28,10 @@ fn expression_test() {
 }
 
 fn main() {
+
+    let file = fs::read("mymain.rs").expect("Unable to read file.");
     let funcs = kb::TopParser::new()
-        .parse("
-        fn mymain() {
-            if 1 == 0 {
-                0;
-            }
-        }")
+        .parse(str::from_utf8(&file).expect("Invalid charaters."))
         .unwrap();
 
         println!("{:?}", funcs);

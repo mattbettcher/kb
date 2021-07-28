@@ -1,2 +1,6 @@
 /target
 /Bootstrap
+*.exe
+*.ilk
+*.obj
+*.pdb
